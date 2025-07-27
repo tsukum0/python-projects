@@ -16,7 +16,7 @@ python --version >nul 2>&1
 if %errorlevel% NEQ 0 (
     echo [!] Python nao encontrado neste sistema.
 
-    set /p baixar=Deseja baixar e instalar o Python %PYTHON_VERSION% agora? (s/n): 
+    set /p "baixar=Deseja baixar e instalar o Python %PYTHON_VERSION% agora? (s/n): "
     if /i "!baixar!"=="s" (
         echo [*] Baixando instalador do Python...
         curl -L -o %PYTHON_INSTALLER% %PYTHON_URL%
@@ -49,8 +49,8 @@ if %errorlevel% NEQ 0 (
 echo [✓] pip pronto.
 
 :: Cria a pasta do projeto
-if not exist %DIR% (
-    mkdir %DIR%
+if not exist "%DIR%" (
+    mkdir "%DIR%"
     echo [+] Pasta %DIR% criada.
 ) else (
     echo [i] Pasta %DIR% ja existe.
@@ -70,7 +70,7 @@ if exist "!FULLPATH!" (
 )
 
 :: Executar?
-set /p exec=Deseja executar o instalador agora? (s/n): 
+set /p "exec=Deseja executar o instalador agora? (s/n): "
 if /i "!exec!"=="s" (
     python "!FULLPATH!"
 )
