@@ -1,40 +1,20 @@
 import os
 import sys
-import subprocess
 import time
 
-mostrar_ip = 0  # mude para 1 se quiser mostrar o ip!
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+VENV_PATH = os.path.join(BASE_DIR, "venv")
+PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
 
-# Dependências necessárias
-REQUIRED_LIBS = ["rich", "psutil"]
-
-def in_venv():
-    return sys.prefix != sys.base_prefix
-
-def install_deps():
-    pip = os.path.join("venv", "Scripts", "pip")
-    subprocess.check_call([pip, "install"] + REQUIRED_LIBS)
-
-def create_venv():
-    if not os.path.exists("venv"):
-        print("[*] Criando ambiente virtual...")
-        subprocess.check_call([sys.executable, "-m", "venv", "venv"])
-    install_deps()
-
-def relaunch_in_venv():
-    python = os.path.join("venv", "Scripts", "python")
-    os.execv(python, [python, __file__])
-
-# Auto setup venv
-if not in_venv():
-    create_venv()
-    relaunch_in_venv()
-
-# Importações após venv estar ativo
-import msvcrt
+# Verifica se está rodando dentro do venv
+if sys.executable != PYTHON_EXEC:
+    print("[ERRO] Execute este script via iniciar.bat para garantir o ambiente virtual ativo.")
+    sys.exit(1)
+    
 import platform
 import psutil
 import socket
+import msvcrt
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -42,7 +22,7 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.columns import Columns
 
-console = Console()
+mostrar_ip = 0  # mude para 1 se quiser mostrar o ip!
 
 def get_uptime():
     boot_time = datetime.fromtimestamp(psutil.boot_time())
