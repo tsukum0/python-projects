@@ -1,34 +1,21 @@
-import os 
+import os
 import sys
-import subprocess
+import time
 
-# Dependências necessárias
+# Dependências necessárias (para referência)
 REQUIRED_LIBS = ["rich", "psutil"]
 
-def in_venv():
-    return sys.prefix != sys.base_prefix
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+VENV_PATH = os.path.join(BASE_DIR, "venv")
+PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
 
-def install_deps():
-    pip = os.path.join("venv", "Scripts", "pip")
-    subprocess.check_call([pip, "install"] + REQUIRED_LIBS)
+# Verifica se está rodando dentro do venv
+if sys.executable != PYTHON_EXEC:
+    print("[ERRO] Execute este script via iniciar.bat para garantir o ambiente virtual ativo.")
+    sys.exit(1)
 
-def create_venv():
-    if not os.path.exists("venv"):
-        print("[*] Criando ambiente virtual...")
-        subprocess.check_call([sys.executable, "-m", "venv", "venv"])
-    install_deps()
-
-def relaunch_in_venv():
-    python = os.path.join("venv", "Scripts", "python")
-    os.execv(python, [python, __file__])
-
-# Auto setup venv
-if not in_venv():
-    create_venv()
-    relaunch_in_venv()
-
-# IMPORTAÇÕES SÓ AQUI 🔽
-import time
+# Agora os imports pesados, só se estiver no venv
+import subprocess
 import psutil
 from datetime import datetime
 from rich.live import Live
