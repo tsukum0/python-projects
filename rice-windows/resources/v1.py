@@ -39,9 +39,9 @@ def criar_iniciar_bat(dir_base, nomes_arquivos):
         f.write("@echo off\n")
         f.write("chcp 65001 >nul\n")
         for i, nome in enumerate(nomes_arquivos):
-    f.write(f"start cmd /k python {nome}\n")
-    if i < len(nomes_arquivos) - 1:
-        f.write("timeout /t 5 /nobreak >nul\n")
+            f.write(f"start cmd /k python {nome}\n")
+            if i < len(nomes_arquivos) - 1:
+                f.write("timeout /t 5 /nobreak >nul\n")
 
 def remover_este_arquivo():
     try:
