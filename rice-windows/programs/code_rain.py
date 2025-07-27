@@ -9,11 +9,6 @@ VENV_PATH = os.path.join(BASE_DIR, "venv")
 PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
 CONFIG_FILE = os.path.join(BASE_DIR, "config_color.txt")
 
-# Verifica se está rodando dentro do venv
-if sys.executable != PYTHON_EXEC:
-    print("[ERRO] Por favor, execute este script via iniciar.bat para garantir o ambiente virtual ativo.")
-    sys.exit(1)
-
 # Agora imports após garantir venv
 import colorama
 from colorama import init, Fore
