@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import subprocess
 
 try:
     import requests
@@ -33,13 +34,33 @@ def baixar_para(destino, url):
         print_fail(f"Erro ao baixar para {destino}: {e}")
         sys.exit(1)
 
+def criar_venv_e_instalar_reqs(pasta):
+    venv_path = os.path.join(pasta, "venv")
+    python_venv = os.path.join(venv_path, "Scripts", "python.exe")
+
+    if not os.path.exists(venv_path):
+        print_info("Criando ambiente virtual...")
+        subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+    else:
+        print_info("Ambiente virtual já existe.")
+
+    print_info("Atualizando pip no ambiente virtual...")
+    subprocess.check_call([python_venv, "-m", "pip", "install", "--upgrade", "pip"])
+
+    req_path = os.path.join(pasta, "requirements.txt")
+    print_info("Instalando dependências do requirements.txt...")
+    subprocess.check_call([python_venv, "-m", "pip", "install", "-r", req_path])
+
+    print_ok("Ambiente virtual pronto e dependências instaladas.")
+
 def criar_iniciar_bat(dir_base, nomes_arquivos):
     caminho_bat = os.path.join(dir_base, "iniciar.bat")
     with open(caminho_bat, "w", encoding="utf-8") as f:
         f.write("@echo off\n")
         f.write("chcp 65001 >nul\n")
+        f.write(f"call {os.path.join('venv', 'Scripts', 'activate.bat')}\n")
         for i, nome in enumerate(nomes_arquivos):
-            f.write(f"start cmd /k python {nome}\n")
+            f.write(f"python {nome}\n")
             if i < len(nomes_arquivos) - 1:
                 f.write("timeout /t 5 /nobreak >nul\n")
         f.write("exit\n")
@@ -77,6 +98,10 @@ def main():
     req_destino = os.path.join(pasta_destino, "requirements.txt")
     baixar_para(req_destino, req_url)
 
+    # Criar venv e instalar libs
+    criar_venv_e_instalar_reqs(pasta_destino)
+
+    # Criar iniciar.bat que ativa o venv e roda scripts
     criar_iniciar_bat(pasta_destino, list(arquivos.keys()))
 
     print_info("Finalizando instalador...")
