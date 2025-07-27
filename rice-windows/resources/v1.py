@@ -1,7 +1,7 @@
 import os
+import sys
 import time
 
-# Códigos ANSI para cores
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
 RED = "\033[31m"
@@ -16,32 +16,44 @@ def print_info(msg):
 def print_fail(msg):
     print(f"{RED}[FAIL]{RESET} {msg}")
 
-def remover_temporarios():
-    base = os.path.dirname(os.path.abspath(__file__))
-    temp_path = os.path.join(base, "temporarios.txt")
+def baixar_arquivo(url, destino):
+    try:
+        import requests
+    except ImportError:
+        print_fail("Modulo 'requests' nao encontrado. Instale com: pip install requests")
+        sys.exit(1)
 
-    if os.path.exists(temp_path):
-        with open(temp_path, "r") as f:
-            arquivos = [linha.strip() for linha in f if linha.strip()]
-        for arquivo in arquivos:
-            alvo = os.path.join(base, arquivo)
-            if os.path.exists(alvo):
-                try:
-                    os.remove(alvo)
-                    print_ok(f"Removido: {arquivo}")
-                except Exception as e:
-                    print_fail(f"Falha ao remover {arquivo}: {e}")
-        try:
-            os.remove(temp_path)
-        except:
-            pass
+    try:
+        print_info(f"Baixando {url} ...")
+        r = requests.get(url)
+        r.raise_for_status()
+        with open(destino, "w", encoding="utf-8") as f:
+            f.write(r.text)
+        print_ok(f"Arquivo salvo: {destino}")
+    except Exception as e:
+        print_fail(f"Erro ao baixar {url}: {e}")
+        sys.exit(1)
 
 def main():
-    print_info("Instalador simulado iniciado...")
-    time.sleep(2)
-    print_ok("Simulacao completa.")
-    time.sleep(1)
-    remover_temporarios()
+    projeto_dir = "meu_projeto"
+    if not os.path.exists(projeto_dir):
+        os.makedirs(projeto_dir)
+        print_ok(f"Pasta criada: {projeto_dir}")
+    else:
+        print_info(f"Pasta ja existe: {projeto_dir}")
+
+    arquivos = {
+        "programa1.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa1.py",
+        "programa2.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa2.py",
+        "programa3.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa3.py",
+    }
+
+    for nome_arquivo, url in arquivos.items():
+        destino = os.path.join(projeto_dir, nome_arquivo)
+        baixar_arquivo(url, destino)
+        time.sleep(1)  # delay só pra mostrar progresso legal
+
+    print_ok("Todos os programas foram baixados e salvos.")
 
 if __name__ == "__main__":
     main()
