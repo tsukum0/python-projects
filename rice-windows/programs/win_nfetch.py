@@ -5,11 +5,6 @@ import time
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 VENV_PATH = os.path.join(BASE_DIR, "venv")
 PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
-
-# Verifica se está rodando dentro do venv
-if sys.executable != PYTHON_EXEC:
-    print("[ERRO] Execute este script via iniciar.bat para garantir o ambiente virtual ativo.")
-    sys.exit(1)
     
 import platform
 import psutil
