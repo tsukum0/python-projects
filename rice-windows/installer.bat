@@ -4,7 +4,7 @@ setlocal ENABLEDELAYEDEXPANSION
 title Instalador do Projeto
 
 :: Configurações
-set "DIR=meu_projeto"
+set "DIR=windows_ricer"
 set "SCRIPT=instalador.py"
 set "RAW_URL=https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/resources/v1.py"
 set "PYTHON_VERSION=3.11.9"
