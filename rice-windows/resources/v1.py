@@ -21,26 +21,27 @@ def print_info(msg):
 def print_fail(msg):
     print(f"{Fore.RED}[FAIL]{Style.RESET_ALL} {msg}")
 
-def baixar_para(nome_arquivo, url):
+def baixar_para(destino, url):
     try:
-        print_info(f"Baixando {nome_arquivo} de:\n  {url}")
+        print_info(f"Baixando:\n  {url}")
         r = requests.get(url)
         r.raise_for_status()
-        with open(nome_arquivo, "w", encoding="utf-8") as f:
+        with open(destino, "w", encoding="utf-8") as f:
             f.write(r.text)
-        print_ok(f"{nome_arquivo} salvo com sucesso.")
+        print_ok(f"Salvo em: {destino}")
     except Exception as e:
-        print_fail(f"Erro ao baixar {nome_arquivo}: {e}")
+        print_fail(f"Erro ao baixar para {destino}: {e}")
         sys.exit(1)
 
-def criar_iniciar_bat(nomes_arquivos):
-    with open("iniciar.bat", "w", encoding="utf-8") as f:
+def criar_iniciar_bat(dir_base, nomes_arquivos):
+    caminho_bat = os.path.join(dir_base, "iniciar.bat")
+    with open(caminho_bat, "w", encoding="utf-8") as f:
         f.write("@echo off\n")
         f.write("chcp 65001 >nul\n")
         for nome in nomes_arquivos:
             f.write(f"start python {nome}\n")
         f.write("exit\n")
-    print_ok("Arquivo iniciar.bat criado.")
+    print_ok(f"iniciar.bat criado em: {caminho_bat}")
 
 def remover_este_arquivo():
     try:
@@ -51,6 +52,12 @@ def remover_este_arquivo():
         print_fail(f"Erro ao remover instalador.py: {e}")
 
 def main():
+    pasta_destino = "windows_ricer"
+
+    if not os.path.exists(pasta_destino):
+        print_fail(f"Pasta '{pasta_destino}' nao encontrada.")
+        sys.exit(1)
+
     arquivos = {
         "code_rain.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/code_rain.py",
         "rsc_manager.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/rsc_manager.py",
@@ -58,10 +65,11 @@ def main():
     }
 
     for nome, url in arquivos.items():
-        baixar_para(nome, url)
+        destino = os.path.join(pasta_destino, nome)
+        baixar_para(destino, url)
         time.sleep(1)
 
-    criar_iniciar_bat(list(arquivos.keys()))
+    criar_iniciar_bat(pasta_destino, list(arquivos.keys()))
 
     print_info("Finalizando instalador...")
     time.sleep(1)
