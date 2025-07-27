@@ -58,12 +58,8 @@ def criar_iniciar_bat(dir_base, nomes_arquivos):
     with open(caminho_bat, "w", encoding="utf-8") as f:
         f.write("@echo off\n")
         f.write("chcp 65001 >nul\n")
-        f.write(f"call {os.path.join('venv', 'Scripts', 'activate.bat')}\n")
-        for i, nome in enumerate(nomes_arquivos):
-            f.write(f"python {nome}\n")
-            if i < len(nomes_arquivos) - 1:
-                f.write("timeout /t 5 /nobreak >nul\n")
-        f.write("exit\n")
+        for nome in nomes_arquivos:
+            f.write(f"start cmd /k python {nome}\n")
     print_ok(f"iniciar.bat criado em: {caminho_bat}")
 
 def remover_este_arquivo():
