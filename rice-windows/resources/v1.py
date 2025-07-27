@@ -2,38 +2,40 @@ import os
 import sys
 import time
 
-GREEN = "\033[32m"
-YELLOW = "\033[33m"
-RED = "\033[31m"
-RESET = "\033[0m"
+try:
+    import requests
+    from colorama import init, Fore, Style
+except ImportError:
+    print("[FAIL] Bibliotecas 'requests' ou 'colorama' nao estao instaladas.")
+    print("Instale com: pip install requests colorama")
+    sys.exit(1)
 
+init(autoreset=True)
+
+# Funções de mensagem
 def print_ok(msg):
-    print(f"{GREEN}[OK]{RESET} {msg}")
+    print(f"{Fore.GREEN}[OK]{Style.RESET_ALL} {msg}")
 
 def print_info(msg):
-    print(f"{YELLOW}[INFO]{RESET} {msg}")
+    print(f"{Fore.YELLOW}[INFO]{Style.RESET_ALL} {msg}")
 
 def print_fail(msg):
-    print(f"{RED}[FAIL]{RESET} {msg}")
+    print(f"{Fore.RED}[FAIL]{Style.RESET_ALL} {msg}")
 
+# Função de download
 def baixar_arquivo(url, destino):
     try:
-        import requests
-    except ImportError:
-        print_fail("Modulo 'requests' nao encontrado. Instale com: pip install requests")
-        sys.exit(1)
-
-    try:
-        print_info(f"Baixando {url} ...")
+        print_info(f"Baixando: {url}")
         r = requests.get(url)
         r.raise_for_status()
         with open(destino, "w", encoding="utf-8") as f:
             f.write(r.text)
-        print_ok(f"Arquivo salvo: {destino}")
+        print_ok(f"Salvo em: {destino}")
     except Exception as e:
         print_fail(f"Erro ao baixar {url}: {e}")
         sys.exit(1)
 
+# Principal
 def main():
     projeto_dir = "meu_projeto"
     if not os.path.exists(projeto_dir):
@@ -51,9 +53,9 @@ def main():
     for nome_arquivo, url in arquivos.items():
         destino = os.path.join(projeto_dir, nome_arquivo)
         baixar_arquivo(url, destino)
-        time.sleep(1)  # delay só pra mostrar progresso legal
+        time.sleep(1)
 
-    print_ok("Todos os programas foram baixados e salvos.")
+    print_ok("Todos os arquivos foram baixados com sucesso.")
 
 if __name__ == "__main__":
     main()
