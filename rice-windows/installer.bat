@@ -6,7 +6,7 @@ title Instalador do Projeto
 :: Configurações
 set "DIR=meu_projeto"
 set "SCRIPT=instalador.py"
-set "RAW_URL=https://raw.githubusercontent.com/SEU_USER/SEU_REPO/main/instalador.py"
+set "RAW_URL=https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/resources/v1.py"
 set "PYTHON_VERSION=3.11.9"
 set "PYTHON_URL=https://www.python.org/ftp/python/%PYTHON_VERSION%/python-%PYTHON_VERSION%-amd64.exe"
 set "PYTHON_INSTALLER=python_installer.exe"
