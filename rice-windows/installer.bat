@@ -1,9 +1,9 @@
 @echo off
+chcp 65001 >nul
 setlocal ENABLEDELAYEDEXPANSION
 
 title Instalador do Projeto
 
-:: Configurações
 set "DIR=windows_ricer"
 set "SCRIPT=instalador.py"
 set "RAW_URL=https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/resources/v1.py"
@@ -11,70 +11,78 @@ set "PYTHON_VERSION=3.11.9"
 set "PYTHON_URL=https://www.python.org/ftp/python/%PYTHON_VERSION%/python-%PYTHON_VERSION%-amd64.exe"
 set "PYTHON_INSTALLER=python_installer.exe"
 
-:: Verifica se Python está instalado
 python --version >nul 2>&1
 if %errorlevel% NEQ 0 (
-    echo [!] Python nao encontrado neste sistema.
+    echo [[31mFAIL[0m] Python nao encontrado neste sistema.
 
     set /p "baixar=Deseja baixar e instalar o Python %PYTHON_VERSION% agora? (s/n): "
     if /i "!baixar!"=="s" (
-        echo [*] Baixando instalador do Python...
+        echo [[33mINFO[0m] Baixando instalador do Python...
         curl -L -o %PYTHON_INSTALLER% %PYTHON_URL%
-        echo [*] Abrindo instalador do Python. Siga as instrucoes na tela.
+        echo [[33mINFO[0m] Abrindo instalador do Python. Siga as instrucoes na tela.
         start "" %PYTHON_INSTALLER%
         pause
     ) else (
-        echo [X] Instalacao cancelada pelo usuario.
+        echo [[31mFAIL[0m] Instalacao cancelada pelo usuario.
         exit /b
     )
 )
 
-:: Verifica novamente
 python --version >nul 2>&1
 if %errorlevel% NEQ 0 (
-    echo [X] Python ainda nao esta instalado. Abortando.
+    echo [[31mFAIL[0m] Python ainda nao esta instalado. Abortando.
     exit /b
 )
 
-echo [✓] Python detectado.
+echo [[32mOK[0m] Python detectado.
 
 :: Verifica pip
 pip --version >nul 2>&1
 if %errorlevel% NEQ 0 (
-    echo [!] pip nao encontrado. Instalando...
+    echo [INFO] pip nao encontrado. Instalando...
     python -m ensurepip --default-pip
     python -m pip install --upgrade pip
 )
 
-echo [✓] pip pronto.
+echo [OK] pip pronto.
 
+:: Instalar dependencias: requests e colorama
+echo [INFO] Instalando bibliotecas 'requests' e 'colorama'...
+python -m pip install requests colorama
+if %errorlevel% EQU 0 (
+    echo [OK] Bibliotecas instaladas com sucesso.
+) else (
+    echo [FAIL] Falha ao instalar as bibliotecas.
+    pause
+    exit /b
+)
 :: Cria a pasta do projeto
-if not exist "%DIR%" (
-    mkdir "%DIR%"
+if not exist %DIR% (
+    mkdir %DIR%
     echo [+] Pasta %DIR% criada.
 ) else (
     echo [i] Pasta %DIR% ja existe.
 )
 
 :: Baixar instalador.py do GitHub Raw
+
 set "FULLPATH=%DIR%\%SCRIPT%"
-echo [*] Baixando %SCRIPT% do GitHub...
+echo [[33mINFO[0m] Baixando %SCRIPT% do GitHub...
 curl -L -o "!FULLPATH!" %RAW_URL%
 
 if exist "!FULLPATH!" (
-    echo [✓] Arquivo %SCRIPT% salvo com sucesso em !FULLPATH!
+    echo [[32mOK[0m] Arquivo %SCRIPT% salvo com sucesso em !FULLPATH!
 ) else (
-    echo [X] Falha ao baixar %SCRIPT%. Verifique o link.
+    echo [[31mFAIL[0m] Falha ao baixar %SCRIPT%. Verifique o link.
     pause
     exit /b
 )
 
-:: Executar?
 set /p "exec=Deseja executar o instalador agora? (s/n): "
 if /i "!exec!"=="s" (
     python "!FULLPATH!"
 )
 
 echo.
-echo [✓] Processo finalizado.
+echo [[32mOK[0m] Processo finalizado.
 pause
