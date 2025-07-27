@@ -1,38 +1,18 @@
 import os
 import sys
-import subprocess
 import random
 import shutil
 import time
 
-os.system('title ')
-
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 VENV_PATH = os.path.join(BASE_DIR, "venv")
-REQ_PATH = os.path.join(BASE_DIR, "requirements.txt")
 PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
 CONFIG_FILE = os.path.join(BASE_DIR, "config_color.txt")
 
-def setup_env():
-    if not os.path.exists(VENV_PATH):
-        print("[*] Criando ambiente virtual...")
-        subprocess.check_call([sys.executable, "-m", "venv", VENV_PATH])
-
-    print("[*] Instalando dependências...")
-    subprocess.check_call([PYTHON_EXEC, "-m", "pip", "install", "--upgrade", "pip"])
-    if not os.path.isfile(REQ_PATH):
-        print(f"[!] Arquivo requirements.txt não encontrado em: {REQ_PATH}")
-        sys.exit(1)
-    subprocess.check_call([PYTHON_EXEC, "-m", "pip", "install", "-r", REQ_PATH])
-
-    print("[*] Executando dentro da venv...")
-    subprocess.check_call([PYTHON_EXEC, __file__])
-    sys.exit()
-
-if sys.executable != PYTHON_EXEC and "VENV_ACTIVE" not in os.environ:
-    os.environ["VENV_ACTIVE"] = "1"
-    setup_env()
+# Verifica se está rodando dentro do venv
+if sys.executable != PYTHON_EXEC:
+    print("[ERRO] Por favor, execute este script via iniciar.bat para garantir o ambiente virtual ativo.")
+    sys.exit(1)
 
 # Agora imports após garantir venv
 import colorama
