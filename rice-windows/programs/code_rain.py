@@ -86,7 +86,7 @@ def main():
             print("\033[1;40m", end="")
             for i in range(largura):
                 if random.random() > 0.975:
-                    print(COR + chr(random.randint(33, 126E)), end="")
+                    print(COR + chr(random.randint(33, 126)), end="")
                     quedas[i] = 0
                 elif quedas[i] < altura:
                     print(" ", end="")
