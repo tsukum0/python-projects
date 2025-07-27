@@ -1,6 +1,21 @@
 import os
 import time
 
+# Códigos ANSI para cores
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+RED = "\033[31m"
+RESET = "\033[0m"
+
+def print_ok(msg):
+    print(f"{GREEN}[OK]{RESET} {msg}")
+
+def print_info(msg):
+    print(f"{YELLOW}[INFO]{RESET} {msg}")
+
+def print_fail(msg):
+    print(f"{RED}[FAIL]{RESET} {msg}")
+
 def remover_temporarios():
     base = os.path.dirname(os.path.abspath(__file__))
     temp_path = os.path.join(base, "temporarios.txt")
@@ -13,21 +28,20 @@ def remover_temporarios():
             if os.path.exists(alvo):
                 try:
                     os.remove(alvo)
-                    print(f"[✓] Removido: {arquivo}")
+                    print_ok(f"Removido: {arquivo}")
                 except Exception as e:
-                    print(f"[x] Falha ao remover {arquivo}: {e}")
+                    print_fail(f"Falha ao remover {arquivo}: {e}")
         try:
             os.remove(temp_path)
         except:
             pass
 
 def main():
-    print("[*] Instalador simulado iniciado...")
+    print_info("Instalador simulado iniciado...")
     time.sleep(2)
-    print("[✓] Simulação completa.")
+    print_ok("Simulacao completa.")
     time.sleep(1)
     remover_temporarios()
 
 if __name__ == "__main__":
     main()
-
