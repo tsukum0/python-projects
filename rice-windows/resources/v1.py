@@ -52,9 +52,9 @@ def remover_este_arquivo():
 
 def main():
     arquivos = {
-        "programa1.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa1.py",
-        "programa2.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa2.py",
-        "programa3.py": "https://raw.githubusercontent.com/seu_usuario/seu_repo/main/programa3.py",
+        "code_rain.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/code_rain.py",
+        "rsc_manager.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/rsc_manager.py",
+        "win_nfetch.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/win_nfetch.py",
     }
 
     for nome, url in arquivos.items():
