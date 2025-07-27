@@ -64,10 +64,16 @@ def main():
         "win_nfetch.py": "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/programs/win_nfetch.py",
     }
 
+    # Baixar arquivos principais
     for nome, url in arquivos.items():
         destino = os.path.join(pasta_destino, nome)
         baixar_para(destino, url)
         time.sleep(1)
+
+    # Baixar requirements.txt
+    req_url = "https://raw.githubusercontent.com/tsukum0/python-projects/refs/heads/main/rice-windows/resources/rq.txt"
+    req_destino = os.path.join(pasta_destino, "requirements.txt")
+    baixar_para(req_destino, req_url)
 
     criar_iniciar_bat(pasta_destino, list(arquivos.keys()))
 
