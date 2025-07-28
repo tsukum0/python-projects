@@ -1,16 +1,23 @@
-import os
+import os 
 import sys
-import time
+import subprocess
 
-# Dependências necessárias (para referência)
+# Dependências necessárias
 REQUIRED_LIBS = ["rich", "psutil"]
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-VENV_PATH = os.path.join(BASE_DIR, "venv")
-PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
+def in_venv():
+    return sys.prefix != sys.base_prefix
 
-# Agora os imports pesados, só se estiver no venv
-import subprocess
+def relaunch_in_venv():
+    python = os.path.join("venv", "Scripts", "python")
+    os.execv(python, [python, __file__])
+
+# Auto setup venv
+if not in_venv():
+    relaunch_in_venv()
+
+# IMPORTAÇÕES SÓ AQUI 🔽
+import time
 import psutil
 from datetime import datetime
 from rich.live import Live
