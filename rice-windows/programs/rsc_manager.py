@@ -2,6 +2,8 @@ import os
 import sys
 import subprocess
 
+os.system('title ')
+
 # Dependências necessárias
 REQUIRED_LIBS = ["rich", "psutil"]
 
