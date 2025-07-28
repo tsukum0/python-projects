@@ -3,6 +3,8 @@ import sys
 import subprocess
 import time
 
+os.system('title ')
+
 mostrar_ip = 0  # mude para 1 se quiser mostrar o ip!
 
 # Dependências necessárias
