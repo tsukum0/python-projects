@@ -1,15 +1,29 @@
 import os
 import sys
+import subprocess
 import time
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-VENV_PATH = os.path.join(BASE_DIR, "venv")
-PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
-    
+mostrar_ip = 0  # mude para 1 se quiser mostrar o ip!
+
+# Dependências necessárias
+REQUIRED_LIBS = ["rich", "psutil"]
+
+def in_venv():
+    return sys.prefix != sys.base_prefix
+
+def relaunch_in_venv():
+    python = os.path.join("venv", "Scripts", "python")
+    os.execv(python, [python, __file__])
+
+# Auto setup venv
+if not in_venv():
+    relaunch_in_venv()
+
+# Importações após venv estar ativo
+import msvcrt
 import platform
 import psutil
 import socket
-import msvcrt
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -17,7 +31,7 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.columns import Columns
 
-mostrar_ip = 0  # mude para 1 se quiser mostrar o ip!
+console = Console()
 
 def get_uptime():
     boot_time = datetime.fromtimestamp(psutil.boot_time())
