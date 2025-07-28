@@ -4,6 +4,8 @@ import random
 import shutil
 import time
 
+os.system('title ')
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 VENV_PATH = os.path.join(BASE_DIR, "venv")
 PYTHON_EXEC = os.path.join(VENV_PATH, "Scripts" if os.name == "nt" else "bin", "python")
